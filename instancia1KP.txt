@@ -1,0 +1,7 @@
+15
+5
+4 12 verde
+2 1 gris
+2 2 azul
+1 1 amarillo
+10 4 naranja
