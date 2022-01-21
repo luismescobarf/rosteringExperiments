@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#Configuración locasl VSCODE
+.vscode/
+
+#Locales ocultos MACOS
+.DS_Store/
