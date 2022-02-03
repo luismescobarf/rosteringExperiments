@@ -127,46 +127,46 @@ def cargarInstanciaMusliu(rutaArchivo):
     return casoEstudio
 
 
-#Sección Principal del codigo (uso de la librería)
-#--------------------------------------------------
+# #Sección Principal del codigo (uso de la librería)
+# #--------------------------------------------------
 
-#Listado de instancias
-nombresInstancias = ["instancias/Example1.txt",
-                     "instancias/Example2.txt",
-                     "instancias/Example3.txt",
-                     "instancias/Example4.txt",
-                     "instancias/Example5.txt",
-                     "instancias/Example6.txt",
-                     "instancias/Example7.txt",
-                     "instancias/Example8.txt",
-                     "instancias/Example9.txt",
-                     "instancias/Example10.txt",
-                     "instancias/Example11.txt",
-                     "instancias/Example12.txt",
-                     "instancias/Example13.txt",
-                     "instancias/Example14.txt",
-                     "instancias/Example15.txt",
-                     "instancias/Example16.txt",
-                     "instancias/Example17.txt",
-                     "instancias/Example18.txt",
-                     "instancias/Example19.txt",
-                     "instancias/Example20.txt"]
+# #Listado de instancias
+# nombresInstancias = ["instancias/Example1.txt",
+#                      "instancias/Example2.txt",
+#                      "instancias/Example3.txt",
+#                      "instancias/Example4.txt",
+#                      "instancias/Example5.txt",
+#                      "instancias/Example6.txt",
+#                      "instancias/Example7.txt",
+#                      "instancias/Example8.txt",
+#                      "instancias/Example9.txt",
+#                      "instancias/Example10.txt",
+#                      "instancias/Example11.txt",
+#                      "instancias/Example12.txt",
+#                      "instancias/Example13.txt",
+#                      "instancias/Example14.txt",
+#                      "instancias/Example15.txt",
+#                      "instancias/Example16.txt",
+#                      "instancias/Example17.txt",
+#                      "instancias/Example18.txt",
+#                      "instancias/Example19.txt",
+#                      "instancias/Example20.txt"]
 
-#nombresInstancias = ["instancias/Example12.txt"]
+# #nombresInstancias = ["instancias/Example12.txt"]
 
-#Carga de cada uno de los archivos del listado previo
-for rutaArchivo in nombresInstancias:   
+# #Carga de cada uno de los archivos del listado previo
+# for rutaArchivo in nombresInstancias:   
      
-    #Salida de diagnóstico
-    print("Caso que se está cargando: ",rutaArchivo)
+#     #Salida de diagnóstico
+#     print("Caso que se está cargando: ",rutaArchivo)
     
-    casoEstudio = cargarInstanciaMusliu(rutaArchivo)
+#     casoEstudio = cargarInstanciaMusliu(rutaArchivo)
     
-    # # #Salida ordenada de diagnóstico
-    # pp.pprint(casoEstudio)
+#     # # #Salida ordenada de diagnóstico
+#     # pp.pprint(casoEstudio)
     
-    #Salida de diagnóstico
-    print("Caso que se está escribiendo: ",rutaArchivo)
+#     #Salida de diagnóstico
+#     print("Caso que se está escribiendo: ",rutaArchivo)
     
-    #Convertir el diccionario a archivo JSON para facilitar la carga en corridas posteriores
-    crearSobreescribir_JSON_Instancia(casoEstudio)
+#     #Convertir el diccionario a archivo JSON para facilitar la carga en corridas posteriores
+#     crearSobreescribir_JSON_Instancia(casoEstudio)
