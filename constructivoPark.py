@@ -31,7 +31,7 @@ def generarProgramacionEmpleado(horizonteTiempo, tiposTurno):
     return programacionEmpleado.copy()
 
 #Función para obtener el número de días consecutivos libres de un itinerario
-def numeroDiasLibresConsecutivos(programacionEnRevision, turnoEntrante, horizonteTiempo):
+def numeroDiasLibresConsecutivos(programacionEnRevision, horizonteTiempo):
     #Inicializar bandera que controla la revisión
     revision = True    
     longitudSecuencia = 0 #Ninguna secuencia detectada aún    
@@ -73,6 +73,7 @@ def incorporarTurno(programacionEnActualizacion, turnoEntrante, numeroDiasLibres
     
     #Actualización del número de días libre consecutivos
     
+    
     #Continuar acá
     #Continuar acá
     #Continuar acá
@@ -87,9 +88,14 @@ def cumplimientoCondiciones(programacionEnRevision, turnoEntrante):
         
         #Revisar secuencias prohibidas
     
-        #Revisar límites superiores de ocupación
+        #Revisar límites de ocupación        
         
-        pass
+        #Revisar número de días libres consecutivos en el itinerario        
+        
+        #Si cumple todas las condiciones, retornar verdadero para que sea incorporado
+        if(all[True,True]):
+            return True
+        
     else:
         #Si el día no está libre, reportar inviabilidad de la incorporación en el itinerario
         return False
