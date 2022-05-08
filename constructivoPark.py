@@ -23,9 +23,9 @@ def generarProgramacionEmpleado(horizonteTiempo, tiposTurno):
     #Forma resumida -> genera problemas por enlazado o referencia de las listas
     #programacionEmpleado['itinerario'] = [ [ ] ] * len(horizonteTiempo)
     
-    #Forma explícita de agregar listas de turnos en el listado de días del cuadro de turnos del empleado
+    #Forma explícita de agregar diccionarios vacíos de turnos en el listado de días del cuadro de turnos del empleado
     programacionEmpleado['itinerario'] = list()
-    [programacionEmpleado['itinerario'].append(list()) for _ in range(len(horizonteTiempo))]
+    [programacionEmpleado['itinerario'].append(dict()) for _ in range(len(horizonteTiempo))]
     
     programacionEmpleado['totalDiasLibre'] = len(horizonteTiempo)    
     programacionEmpleado['diasTrabajo'] = 0    
@@ -48,9 +48,11 @@ def numeroDiasLibresConsecutivos(programacionEnRevision, horizonteTiempo):
         #Inicializar la longitud de la secuencia actual (para comparar con la burbuja)
         longitudSecuenciaActual = 0
         #Realizar el conteo de cada secuencia
-        while i < len(horizonteTiempo):            
+        #while i < len(horizonteTiempo):            
+        while i < horizonteTiempo:            
             #Si el día actual está libre
-            if programacionEnRevision['itinerario'][i] == list():
+            #if programacionEnRevision['itinerario'][i] == list():
+            if programacionEnRevision['itinerario'][i] == dict():
                 longitudSecuenciaActual += 1
                 i += 1
             else:#El día no está libre, se rompe la secuencia
@@ -61,17 +63,25 @@ def numeroDiasLibresConsecutivos(programacionEnRevision, horizonteTiempo):
                 i += 1                
                 break #Terminación de la secuencia actual       
         #Si la revisión ha llegado al final romper el bucle general
-        if i == len(horizonteTiempo)-1:
+        #if i == len(horizonteTiempo)-1:
+        if i == horizonteTiempo-1:
             break
     #Al finalizar todo el proceso, retornar la longitud mayor
     return longitudSecuencia
 
 #Función para incorporar turno en el itinerario de un empleado (actualización de indicadores)
 #--------------------------------------------------------------------------------------------
-def incorporarTurno(programacionEnActualizacion, turnoEntrante, numeroDiasLibresConsecutivos):
+def incorporarTurno(programacionEnActualizacion, turnoEntrante):
+    
+    # #Salida de diagnóstico
+    # print("Valores recibidos:")    
+    # print("ProgramacionEnActualizacion")
+    # pp.pprint(programacionEnActualizacion)
+    # print("TurnoEntrante")
+    # pp.pprint(turnoEntrante)    
     
     #Actualización por referencia del itinerario
-    programacionEnActualizacion['itinerario'][ turnoEntrante['indiceDia']  ] = turnoEntrante['indiceDia']
+    programacionEnActualizacion['itinerario'][ turnoEntrante['indiceDia']  ] = turnoEntrante
     
     #Actualizar los demás valores    
     programacionEnActualizacion['totalDiasLibre'] -= 1 
@@ -79,12 +89,17 @@ def incorporarTurno(programacionEnActualizacion, turnoEntrante, numeroDiasLibres
     programacionEnActualizacion['conteoTiposTurno'][turnoEntrante['tipoTurno']] += 1
     
     #Actualización del número de días libre consecutivos
+    programacionEnActualizacion['diasLibreConsecutivos'] = numeroDiasLibresConsecutivos(programacionEnActualizacion, len(programacionEnActualizacion['itinerario']))
     
     
+    # #Mostrar actualización dentro de la función (diagnóstico)
+    # print("------------------")
+    # print("Estado del itinerario dentro d ela función")    
+    # pp.pprint(programacionEnActualizacion)    
+    # print("------------------")
     
-    #Continuar acá
-    #Continuar acá
-    #Continuar acá
+    #Continuar acá con las otras actualizaciones
+    #Continuar acá con las otras actualizaciones 
     
     
 
@@ -140,16 +155,21 @@ for i,tipoTurno in enumerate(instancia['matrizRequerimientos']):
             })
             
 #Salida pedazos (turnos) de la matriz de requerimientos            
+print("---------------------------")
 print("Salida del listado plano de pedazos de turno (base codificación Park 2001): ")
 for i,turnoK in enumerate(listadoTurnosPlano):
     print(f"Turno {i}: {turnoK}")
+print("---------------------------")
     
 #Establacer un orden (aleatorio o no) para recorrer esos pedazos
 ordenCoberturaTurnos = list(range(len(listadoTurnosPlano)))
 random.shuffle(ordenCoberturaTurnos)
 
 #Salida de diagnóstico
+print("---------------------------")
+print("Orden de cobertura de turnos: ")
 print(ordenCoberturaTurnos)
+print("---------------------------")
 
 #Recorrer los pedazos y acomodarlos entre el personal disponible
 cuadroTurnos = list()
@@ -178,7 +198,12 @@ cuadroTurnos.append(generarProgramacionEmpleado(dias,tiposTurno))
 # print("---------")
 
 #Reemplazar esta forma de agregar por incorporar (actualizando los parámetros)
-cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ].append(listadoTurnosPlano[ ordenCoberturaTurnos[0] ]) 
+#cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ].append(listadoTurnosPlano[ ordenCoberturaTurnos[0] ]) 
+#cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ] = listadoTurnosPlano[ ordenCoberturaTurnos[0] ]
+
+#Llamado a la incorporación adecuada
+incorporarTurno(cuadroTurnos[-1], listadoTurnosPlano[ ordenCoberturaTurnos[0] ] )
+
 
 #Salida de diagnóstico
 print("Estado del cuadro de turnos después de inicializar (incorporar):")
@@ -192,14 +217,14 @@ pp.pprint(cuadroTurnos)
 #Acomodar los demás turnos en el cuadro con la estrategia Park, 2001
 for i in range(1,len(ordenCoberturaTurnos)):
     
-    #Ejemplo de recorrido
+    #Ejemplo de recorrido con la variación del subíndice
     #ordenCoberturaTurnos[i]
     
     #Por cada turno:
     """
-    1) Tomar la programación en actualización e incorporar turno de la iteración actual
+    1) Tomar la programación en actualización e incorporar turno de la iteración actual (i-ésimo turno)
     2) Revisar condiciones: 
-    2a) Si se cumplen continuar con el siguiente turno en la secuencia
+    2a) Si se cumplen continuar con el siguiente turno en la secuencia (turno i+1)
     2b) Si no se cumplen, descartar la secuencia 
     """
     
