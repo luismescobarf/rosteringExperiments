@@ -85,51 +85,52 @@ def incorporarTurno(programacionEnActualizacion, turnoEntrante):
     # print("TurnoEntrante")
     # pp.pprint(turnoEntrante)
     
-    #Actualización por referencia del itinerario
-    programacionEnActualizacion['itinerario'][ turnoEntrante['indiceDia']  ] = turnoEntrante
+    #Revisión de disponibilidad antes de incorporar y validar
+    if programacionEnActualizacion['itinerario'][ turnoEntrante['indiceDia']  ] == dict():
+                
+        #Actualización por referencia del itinerario
+        programacionEnActualizacion['itinerario'][ turnoEntrante['indiceDia']  ] = turnoEntrante
+        
+        #Actualizar los demás valores    
+        programacionEnActualizacion['totalDiasLibre'] -= 1 
+        programacionEnActualizacion['diasTrabajo'] += 1
+        programacionEnActualizacion['conteoTiposTurno'][turnoEntrante['tipoTurno']] += 1
+        
+        #Actualización del número de días libre consecutivos
+        programacionEnActualizacion['diasLibreConsecutivos'] = numeroDiasLibresConsecutivos(programacionEnActualizacion, len(programacionEnActualizacion['itinerario']))
+            
+        # #Mostrar actualización dentro de la función (diagnóstico)
+        # print("------------------")
+        # print("Estado del itinerario dentro d ela función")    
+        # pp.pprint(programacionEnActualizacion)    
+        # print("------------------")
     
-    #Actualizar los demás valores    
-    programacionEnActualizacion['totalDiasLibre'] -= 1 
-    programacionEnActualizacion['diasTrabajo'] += 1
-    programacionEnActualizacion['conteoTiposTurno'][turnoEntrante['tipoTurno']] += 1
+    else:#Si no había disponibilidad, retornar una bandera de -1 y realizar el control correspondiente
+        return -1
     
-    #Actualización del número de días libre consecutivos
-    programacionEnActualizacion['diasLibreConsecutivos'] = numeroDiasLibresConsecutivos(programacionEnActualizacion, len(programacionEnActualizacion['itinerario']))
-    
-    
-    # #Mostrar actualización dentro de la función (diagnóstico)
-    # print("------------------")
-    # print("Estado del itinerario dentro d ela función")    
-    # pp.pprint(programacionEnActualizacion)    
-    # print("------------------")   
+    #Si se incorporó bajo disponibilidad, retornar programación para las validaciones restantesa
+    return programacionEnActualizacion
+          
 
 #Función para revisar cumplimiento de secuencias y condiciones en una programación de un empleado
-def cumplimientoCondiciones(programacionEnRevision, turnoEntrante):
-    
-    #Revisar si el día está libre
-    if programacionEnRevision['itinerario'][ turnoEntrante['indiceDia'] ] == list():
+def cumplimientoCondiciones(programacionEnRevision):   
         
-        #Revisar secuencias prohibidas
-    
-        #Revisar límites de ocupación        
-        
-        #Revisar número de días libres consecutivos en el itinerario
-        
-        #Revisar si cumple el número de días mínimo y máximo de cada tipo de turno
-        
-        #Si cumple todas las condiciones, retornar verdadero para que sea incorporado
-        if(all[True,
-               True]):
-            #Reportar viabilidad al cumplir todas las condiciones
-            return True
-        else:
-            #Reportar inviabilidad al incumplir alguna de las condiciones para incorporación
-            return False
-        
-    else:
-        #Si el día no está libre, reportar inviabilidad de la incorporación en el itinerario
-        return False
+    #Revisar que no hay secuencias prohibidas en la programación
 
+    #Revisar cumplimiento de límites de ocupación        
+    
+    #Revisar cumplimiento de número de días libres consecutivos en el itinerario (tanto límite inferior como límite superior)
+    
+    #Revisar si cumple el número de días mínimo y máximo de cada tipo de turno
+    
+    #Si cumple todas las condiciones, retornar verdadero para que sea incorporado
+    if(all[True,
+            True]):#Actualizar una vez estén implementadas todas las condiciones
+        #Reportar viabilidad al cumplir todas las condiciones
+        return True
+    else:
+        #Reportar inviabilidad al incumplir alguna de las condiciones para incorporación
+        return False
 
 #Sección principal
 #-----------------
@@ -197,13 +198,12 @@ cuadroTurnos.append(generarProgramacionEmpleado(dias,tiposTurno))
 # print(f"Tipado de la posición: {type(cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ])}")
 # print("---------")
 
-#Reemplazar esta forma de agregar por incorporar (actualizando los parámetros)
+#Reemplazar estas formas de agregar por incorporar (actualizando los parámetros)
 #cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ].append(listadoTurnosPlano[ ordenCoberturaTurnos[0] ]) 
 #cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ] = listadoTurnosPlano[ ordenCoberturaTurnos[0] ]
 
-#Llamado a la incorporación adecuada
+#Llamado a la incorporación adecuada (no requiere validaciones por ser el inicio del cuadro de turnos)
 incorporarTurno(cuadroTurnos[-1], listadoTurnosPlano[ ordenCoberturaTurnos[0] ] )
-
 
 #Salida de diagnóstico
 print("Estado del cuadro de turnos después de inicializar (incorporar):")
@@ -217,15 +217,25 @@ pp.pprint(cuadroTurnos)
 #Acomodar los demás turnos en el cuadro con la estrategia Park, 2001
 for i in range(1,len(ordenCoberturaTurnos)):
     
-    #Ejemplo de recorrido con la variación del subíndice
-    #ordenCoberturaTurnos[i]
+    #Ejemplo de acceso a cada turno con el subíndice del ciclo general
+    #ordenCoberturaTurnos[i] 
     
-    #Por cada turno:
     """
-    1) Tomar la programación en actualización e incorporar turno de la iteración actual (i-ésimo turno)
-    2) Revisar condiciones: 
-    2a) Si se cumplen continuar con el siguiente turno en la secuencia (turno i+1)
-    2b) Si no se cumplen, descartar la secuencia 
+    ------------------------------
+    Algoritmo Constructivo Turnos:
+    1) Por cada turno:
+        1.1) Tomar la programación en actualización e incorporar turno de la iteración actual (i-ésimo turno)
+        1.2) Revisar condiciones: 
+            1.2.a) Si se cumplen -> continuar con el siguiente turno en la secuencia (turno i+1)
+            1.2.b) Si no se cumplen -> adicionar programación del empleado al cuadro de turnos 
+                                    -> y abrir programación para un nuevo empleado
+    ------------------------------
     """
+    
+    #El empleado actual es el último adicionado en el cuadro de turnos
     
     pass
+
+#Reportar número de operadores o empleados ocupados con la secuencia aleatoria utilizada
+
+#Consolidados solicitados
