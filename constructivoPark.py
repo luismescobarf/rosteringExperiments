@@ -3,7 +3,7 @@
 
 #Librerías
 #---------
-import cargaInstancias
+import cargaInstancias #Librería con funcionalidades desarrolladas para gestión de las instancias
 import json
 import pprint as pp 
 import random
@@ -18,8 +18,15 @@ def generarProgramacionEmpleado(horizonteTiempo, tiposTurno):
     programacionEmpleado = dict()
     
     #Inicializar valores
-    programacionEmpleado['cerrada'] = False            
-    programacionEmpleado['itinerario'] = [ [ ] ] * len(horizonteTiempo)
+    programacionEmpleado['cerrada'] = False
+                
+    #Forma resumida -> genera problemas por enlazado o referencia de las listas
+    #programacionEmpleado['itinerario'] = [ [ ] ] * len(horizonteTiempo)
+    
+    #Forma explícita de agregar listas de turnos en el listado de días del cuadro de turnos del empleado
+    programacionEmpleado['itinerario'] = list()
+    [programacionEmpleado['itinerario'].append(list()) for _ in range(len(horizonteTiempo))]
+    
     programacionEmpleado['totalDiasLibre'] = len(horizonteTiempo)    
     programacionEmpleado['diasTrabajo'] = 0    
     programacionEmpleado['conteoTiposTurno'] = dict()
@@ -74,6 +81,7 @@ def incorporarTurno(programacionEnActualizacion, turnoEntrante, numeroDiasLibres
     #Actualización del número de días libre consecutivos
     
     
+    
     #Continuar acá
     #Continuar acá
     #Continuar acá
@@ -90,11 +98,18 @@ def cumplimientoCondiciones(programacionEnRevision, turnoEntrante):
     
         #Revisar límites de ocupación        
         
-        #Revisar número de días libres consecutivos en el itinerario        
+        #Revisar número de días libres consecutivos en el itinerario
+        
+        #Revisar si cumple el número de días mínimo y máximo de cada tipo de turno
         
         #Si cumple todas las condiciones, retornar verdadero para que sea incorporado
-        if(all[True,True]):
+        if(all[True,
+               True]):
+            #Reportar viabilidad al cumplir todas las condiciones
             return True
+        else:
+            #Reportar inviabilidad al incumplir alguna de las condiciones para incorporación
+            return False
         
     else:
         #Si el día no está libre, reportar inviabilidad de la incorporación en el itinerario
@@ -108,7 +123,7 @@ def cumplimientoCondiciones(programacionEnRevision, turnoEntrante):
 instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example1.json")
 
 #Partir la matriz de requerimientos en pedazos y formar un listado
-
+#-----------------------------------------------------------------
 listadoTurnosPlano = list()
 #Arreglo de los tipos de turno
 tiposTurno = list(instancia['detalleTurnos'].keys())
@@ -125,6 +140,7 @@ for i,tipoTurno in enumerate(instancia['matrizRequerimientos']):
             })
             
 #Salida pedazos (turnos) de la matriz de requerimientos            
+print("Salida del listado plano de pedazos de turno (base codificación Park 2001): ")
 for i,turnoK in enumerate(listadoTurnosPlano):
     print(f"Turno {i}: {turnoK}")
     
@@ -149,11 +165,24 @@ tiposTurnoInstancia.append("-")
 
 #Abrir la programación del primer empleado con el primer turno del orden de cobertura
 cuadroTurnos.append(generarProgramacionEmpleado(dias,tiposTurno))
-cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia']  ] = listadoTurnosPlano[ ordenCoberturaTurnos[0] ] 
+
+# #Salidas de diagnóstico de la creación del cuadro de turnos y primer turno
+# print("Declaración del cuadro de turnos: ")
+# pp.pprint(cuadroTurnos)
+# print("---------")
+# print("Diagnóstico del tipado del cuadro de turnos y el primer turno:")
+# print(len(cuadroTurnos[-1]['itinerario']))
+# [ print(type(elemento)) for elemento in cuadroTurnos[-1]['itinerario'] ]
+# print(f"Indice del dia: {listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia']}")
+# print(f"Tipado de la posición: {type(cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ])}")
+# print("---------")
+
+#Reemplazar esta forma de agregar por incorporar (actualizando los parámetros)
+cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ].append(listadoTurnosPlano[ ordenCoberturaTurnos[0] ]) 
 
 #Salida de diagnóstico
-print("Cuadro de turnos:")
-print(cuadroTurnos)
+print("Estado del cuadro de turnos después de inicializar (incorporar):")
+pp.pprint(cuadroTurnos)
 
 #Seccionar la programación del empleado según los días o el horizonte de tiempo
 #Cada tripulante es un elemento de la lista cuadroTurnos, 
@@ -165,5 +194,13 @@ for i in range(1,len(ordenCoberturaTurnos)):
     
     #Ejemplo de recorrido
     #ordenCoberturaTurnos[i]
+    
+    #Por cada turno:
+    """
+    1) Tomar la programación en actualización e incorporar turno de la iteración actual
+    2) Revisar condiciones: 
+    2a) Si se cumplen continuar con el siguiente turno en la secuencia
+    2b) Si no se cumplen, descartar la secuencia 
+    """
     
     pass
