@@ -235,17 +235,23 @@ for i in range(1,len(ordenCoberturaTurnos)):
                 -> adicionar turno i a la programación abierta
                 -> incorporar programación al cuadro de turnos 
     ------------------------------------------------------------------
-    """   
+    """
     
+    #Bandera de incorporación exitosa en alguno de los turnos
+    incorporacionExitosa = False #Se inicializa falso porque el turno i-ésimo no ha sido incorporado exitosamente (respetando las restricciones)
     
-    #El empleado actual es el último adicionado en el cuadro de turnos    
-    programacionEnActualizacion = incorporarTurno(cuadroTurnos[-1].copy(), listadoTurnosPlano[ ordenCoberturaTurnos[i] ] )
-    if isinstance(programacionEnActualizacion, dict) :
-        #Proceder a revisar la programación antes de actualizar el cuadro de turnos
+    #Recorrer todas las programaciones (empleados) del cuadro de turnos
+    for j in range(len(cuadroTurnos)):
+        programacionEnActualizacion = incorporarTurno(cuadroTurnos[j].copy(), listadoTurnosPlano[ ordenCoberturaTurnos[i] ] )
+        #Si es superada la disponibilidad del empleado j-ésimo
+        if isinstance(programacionEnActualizacion, dict) :
+            #Proceder a revisar la programación antes de actualizar el cuadro de turnos
+            pass
+        
+    #Si no fue exitosa, abrir una nueva programación en el cuadro de turnos
+    if incorporacionExitosa == False:
         pass
-    else:
-        #Abrir programación para un nuevo empleado
-        pass 
+        
 
 #Reportar número de operadores o empleados ocupados con la secuencia aleatoria utilizada
 
