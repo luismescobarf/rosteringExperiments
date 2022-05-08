@@ -39,35 +39,40 @@ def generarProgramacionEmpleado(horizonteTiempo, tiposTurno):
 
 #Función para obtener el número de días consecutivos libres de un itinerario
 def numeroDiasLibresConsecutivos(programacionEnRevision, horizonteTiempo):
-    #Inicializar bandera que controla la revisión
-    revision = True    
-    longitudSecuencia = 0 #Ninguna secuencia detectada aún    
-    i = 0 #Aumento del alcance de la variable        
-    #Bucle que detecta la mayor secuencia con días libres
-    while revision:
-        #Inicializar la longitud de la secuencia actual (para comparar con la burbuja)
-        longitudSecuenciaActual = 0
-        #Realizar el conteo de cada secuencia
-        #while i < len(horizonteTiempo):            
-        while i < horizonteTiempo:            
-            #Si el día actual está libre
-            #if programacionEnRevision['itinerario'][i] == list():
-            if programacionEnRevision['itinerario'][i] == dict():
-                longitudSecuenciaActual += 1
-                i += 1
-            else:#El día no está libre, se rompe la secuencia
-                #Revisar si la mayor longitud se supera
-                if longitudSecuenciaActual > longitudSecuencia:
-                    longitudSecuencia = longitudSecuenciaActual                
-                #Mover el día para la búsqueda de la siguiente secuencia
-                i += 1                
-                break #Terminación de la secuencia actual       
-        #Si la revisión ha llegado al final romper el bucle general
-        #if i == len(horizonteTiempo)-1:
-        if i == horizonteTiempo-1:
-            break
-    #Al finalizar todo el proceso, retornar la longitud mayor
-    return longitudSecuencia
+    
+    #Estructura para acumular el tamaño de las secuencias con días libres consecutivos
+    tamaniosSecuenciasLibres = []     
+    
+    #Inicializar la longitud de la secuencia actual
+    longitudSecuenciaActual = 0        
+    
+    #Recorrer todo el horizonte de tiempo
+    for i in range(horizonteTiempo):          
+        
+        #Si el día actual del empleado está libre
+        if programacionEnRevision['itinerario'][i] == dict():
+            longitudSecuenciaActual += 1                
+        else:#El día no está libre, se rompe la secuencia                                
+            #Acumular el tamaño de secuencia (si es diferente de cero)
+            if longitudSecuenciaActual != 0:                
+                tamaniosSecuenciasLibres.append(longitudSecuenciaActual)
+            #Reiniciar el tamaño de la secuencia
+            longitudSecuenciaActual = 0
+            
+    #Revisar cuando los días libres llegan hasta el final del horizonte de tiempo y no se descargó la secuencia
+    if longitudSecuenciaActual !=0:
+        tamaniosSecuenciasLibres.append(longitudSecuenciaActual)        
+        
+    #Salida de diagnóstico
+    print("---------------")
+    print(f"Estado de detección de secuencias libres {tamaniosSecuenciasLibres}")
+    print("---------------")
+    
+    #Al finalizar todo el proceso, retornar la longitud mayor   
+    if tamaniosSecuenciasLibres == list():
+        return 0#Asegurar el retorno si no se encuentran secuencias de días libres   
+    else:
+        return max(tamaniosSecuenciasLibres)#Retornar la secuencia más larga encontrada
 
 #Función para incorporar turno en el itinerario de un empleado (actualización de indicadores)
 #--------------------------------------------------------------------------------------------
@@ -78,7 +83,7 @@ def incorporarTurno(programacionEnActualizacion, turnoEntrante):
     # print("ProgramacionEnActualizacion")
     # pp.pprint(programacionEnActualizacion)
     # print("TurnoEntrante")
-    # pp.pprint(turnoEntrante)    
+    # pp.pprint(turnoEntrante)
     
     #Actualización por referencia del itinerario
     programacionEnActualizacion['itinerario'][ turnoEntrante['indiceDia']  ] = turnoEntrante
@@ -96,12 +101,7 @@ def incorporarTurno(programacionEnActualizacion, turnoEntrante):
     # print("------------------")
     # print("Estado del itinerario dentro d ela función")    
     # pp.pprint(programacionEnActualizacion)    
-    # print("------------------")
-    
-    #Continuar acá con las otras actualizaciones
-    #Continuar acá con las otras actualizaciones 
-    
-    
+    # print("------------------")   
 
 #Función para revisar cumplimiento de secuencias y condiciones en una programación de un empleado
 def cumplimientoCondiciones(programacionEnRevision, turnoEntrante):
