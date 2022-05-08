@@ -218,23 +218,34 @@ pp.pprint(cuadroTurnos)
 for i in range(1,len(ordenCoberturaTurnos)):
     
     #Ejemplo de acceso a cada turno con el subíndice del ciclo general
-    #ordenCoberturaTurnos[i] 
+    #Subíndice -> ordenCoberturaTurnos[i] 
+    #Turno -> listadoTurnosPlano[ ordenCoberturaTurnos[i] ]
     
     """
-    ------------------------------
+    ------------------------------------------------------------------
     Algoritmo Constructivo Turnos:
-    1) Por cada turno:
-        1.1) Tomar la programación en actualización e incorporar turno de la iteración actual (i-ésimo turno)
-        1.2) Revisar condiciones: 
-            1.2.a) Si se cumplen -> continuar con el siguiente turno en la secuencia (turno i+1)
-            1.2.b) Si no se cumplen -> adicionar programación del empleado al cuadro de turnos 
-                                    -> y abrir programación para un nuevo empleado
-    ------------------------------
-    """
+    1) Por cada turno i de la secuencia:
+        1.1) Por cada programación j del cuadro de turnos:        
+            1.1.1) Tomar la programación j en actualización (copia) e incorporar turno de la iteración actual (i-ésimo turno)
+            1.1.2) Revisar condiciones: 
+                1.1.2.a) Si se cumplen -> continuar con el siguiente turno i en la secuencia
+                1.1.2.b) Si no se cumplen -> probar con la programación j+1               
+        1.2) Si no fue posible acomodar en ninguna programación el turno:
+                -> abrir programación para un nuevo empleado
+                -> adicionar turno i a la programación abierta
+                -> incorporar programación al cuadro de turnos 
+    ------------------------------------------------------------------
+    """   
     
-    #El empleado actual es el último adicionado en el cuadro de turnos
     
-    pass
+    #El empleado actual es el último adicionado en el cuadro de turnos    
+    programacionEnActualizacion = incorporarTurno(cuadroTurnos[-1].copy(), listadoTurnosPlano[ ordenCoberturaTurnos[i] ] )
+    if isinstance(programacionEnActualizacion, dict) :
+        #Proceder a revisar la programación antes de actualizar el cuadro de turnos
+        pass
+    else:
+        #Abrir programación para un nuevo empleado
+        pass 
 
 #Reportar número de operadores o empleados ocupados con la secuencia aleatoria utilizada
 
