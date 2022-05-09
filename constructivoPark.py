@@ -45,24 +45,24 @@ def numeroDiasLibresConsecutivos(programacionEnRevision, horizonteTiempo):
     tamaniosSecuenciasLibres = []     
     
     #Inicializar la longitud de la secuencia actual
-    longitudSecuenciaActual = 0        
+    longitudSecuenciaActualLibres = 0        
     
     #Recorrer todo el horizonte de tiempo
     for i in range(horizonteTiempo):          
         
         #Si el día actual del empleado está libre
         if programacionEnRevision['itinerario'][i] == dict():
-            longitudSecuenciaActual += 1                
+            longitudSecuenciaActualLibres += 1                
         else:#El día no está libre, se rompe la secuencia                                
             #Acumular el tamaño de secuencia (si es diferente de cero)
-            if longitudSecuenciaActual != 0:                
-                tamaniosSecuenciasLibres.append(longitudSecuenciaActual)
+            if longitudSecuenciaActualLibres != 0:                
+                tamaniosSecuenciasLibres.append(longitudSecuenciaActualLibres)
             #Reiniciar el tamaño de la secuencia
-            longitudSecuenciaActual = 0
+            longitudSecuenciaActualLibres = 0
             
     #Revisar cuando los días libres llegan hasta el final del horizonte de tiempo y no se descargó la secuencia
-    if longitudSecuenciaActual !=0:
-        tamaniosSecuenciasLibres.append(longitudSecuenciaActual)        
+    if longitudSecuenciaActualLibres !=0:
+        tamaniosSecuenciasLibres.append(longitudSecuenciaActualLibres)        
         
     #Salida de diagnóstico
     print("---------------")
@@ -88,7 +88,7 @@ def numeroDiasTrabajandoConsecutivos(programacionEnRevision, horizonteTiempo):
     #Recorrer todo el horizonte de tiempo
     for i in range(horizonteTiempo):          
         
-        #Si el día actual del empleado está libre
+        #Si el día actual del empleado está ocupado
         if programacionEnRevision['itinerario'][i] != dict():
             longitudSecuenciaActual += 1                
         else:#El día está libre, se rompe la secuencia                                
@@ -109,7 +109,7 @@ def numeroDiasTrabajandoConsecutivos(programacionEnRevision, horizonteTiempo):
     
     #Al finalizar todo el proceso, retornar la longitud mayor   
     if tamaniosSecuenciasOcupados == list():
-        return 0#Asegurar el retorno si no se encuentran secuencias de días libres   
+        return 0#Asegurar el retorno si no se encuentran secuencias de días trabajados   
     else:
         return max(tamaniosSecuenciasOcupados)#Retornar la secuencia más larga encontrada
     
@@ -128,6 +128,12 @@ def incorporarTurno(programacionEnActualizacion, turnoEntrante):
     
     #Revisión de disponibilidad antes de incorporar y validar
     if programacionEnActualizacion['itinerario'][ turnoEntrante['indiceDia']  ] == dict():
+        
+        
+        print("-->->->->->->- Antes de actualización -->->->->->->-")
+        pp.pprint(programacionEnActualizacion)
+        print("-->->->->->->- Antes de actualización -->->->->->->-")
+        
                 
         #Actualización por referencia del itinerario
         programacionEnActualizacion['itinerario'][ turnoEntrante['indiceDia']  ] = turnoEntrante
@@ -148,12 +154,18 @@ def incorporarTurno(programacionEnActualizacion, turnoEntrante):
         # print("Estado del itinerario dentro d ela función")    
         # pp.pprint(programacionEnActualizacion)    
         # print("------------------")
+        
+        print("-->->->->->->- Después de actualización -->->->->->->-")
+        pp.pprint(programacionEnActualizacion)
+        print("-->->->->->->- Después de actualización -->->->->->->-")
+        
+        #input()#Pausa para revisar
     
     else:#Si no había disponibilidad, retornar una bandera de -1 y realizar el control correspondiente
         return -1
     
     #Si se incorporó bajo disponibilidad, retornar programación para las validaciones restantesa
-    return programacionEnActualizacion
+    return programacionEnActualizacion.copy()
           
 
 #Función para revisar cumplimiento de secuencias y condiciones en una programación de un empleado
@@ -248,8 +260,8 @@ def cumplimientoCondiciones(programacionEnRevision, instancia, tiposTurno):
 #-----------------
 
 #Carga de la instancia que se va a trabajar
-#instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example1.json")
-instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example5.json")
+instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example1.json")
+#instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example5.json")
 
 #Partir la matriz de requerimientos en pedazos y formar un listado
 #-----------------------------------------------------------------
@@ -322,7 +334,7 @@ cuadroTurnos.append(generarProgramacionEmpleado(dias,tiposTurno))
 #cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ] = listadoTurnosPlano[ ordenCoberturaTurnos[0] ]
 
 #Llamado a la incorporación adecuada (no requiere validaciones por ser el inicio del cuadro de turnos)
-incorporarTurno(cuadroTurnos[-1], listadoTurnosPlano[ ordenCoberturaTurnos[0] ] )
+cuadroTurnos[-1] = incorporarTurno(cuadroTurnos[-1].copy(), listadoTurnosPlano[ ordenCoberturaTurnos[0] ] )
 
 #Salida de diagnóstico
 print("Estado del cuadro de turnos después de inicializar (incorporar):")
@@ -367,7 +379,7 @@ for i in range(1,len(ordenCoberturaTurnos)):
             #Proceder a revisar la programación antes de actualizar el cuadro de turnos
             if cumplimientoCondiciones(programacionEnActualizacion, instancia, tiposTurno):
                 #Actualizar la programación en el cuadro de turnos
-                cuadroTurnos[j] = programacionEnActualizacion
+                cuadroTurnos[j] = programacionEnActualizacion.copy()
                 #Reportar éxito al incorporar en alguna de las programaciones
                 incorporacionExitosa = True
                 break#Evitar más revisiones
@@ -377,13 +389,14 @@ for i in range(1,len(ordenCoberturaTurnos)):
         #Nueva programación (ocupación de un nuevo empleado)
         cuadroTurnos.append(generarProgramacionEmpleado(dias,tiposTurno))
         #Actualizar los valores de la nueva programación
-        incorporarTurno(cuadroTurnos[-1], listadoTurnosPlano[ ordenCoberturaTurnos[i] ] )
+        cuadroTurnos[-1] = incorporarTurno(cuadroTurnos[-1].copy(), listadoTurnosPlano[ ordenCoberturaTurnos[i] ] )
         
         
 #Mostrar cuadro de turnos final
-print('-------------------------------------------------')
-pp.pprint(cuadroTurnos)
-print('-------------------------------------------------')
+for i,programacion in enumerate(cuadroTurnos):
+    print('**************************************************')
+    pp.pprint(programacion)
+    print('**************************************************')
 
 #Reportar número de operadores o empleados ocupados con la secuencia aleatoria utilizada
 print('-------------------------------------------------')
