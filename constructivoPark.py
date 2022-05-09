@@ -391,3 +391,7 @@ print('Reporte del constructivo')
 print(f"Numero Operadores Ocupados: {len(cuadroTurnos)}")
 print(f"Numero Operadores Disponibles: { instancia['numeroEmpleados']}")
 print('-------------------------------------------------')
+
+
+#Continuar acá!!!
+#Número de días trabajados consecutivos está funcionando de forma intermitente: depurar!
