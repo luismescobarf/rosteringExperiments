@@ -11,6 +11,24 @@ def cargaVersionJSON(rutaArchivo):
             casoEstudio = json.load(f)
     except:
         print("Fallo cargando el caso de estudio en JSON!")
+        
+    #Versión string de las secuencias prohibidas para facilitar validación
+    casoEstudio['strSecuenciasTurnosNP'] = {
+        'longitud2': list(),
+        'longitud3': list()
+    }
+    
+    #Recorrer las secuencias no permitidas para cargarlas en format string (opcional)
+    for i,secuenciaNP in enumerate(casoEstudio['SecuenciaTurnosNP']):
+        #Revisar si corresponde a las de longitud 2
+        if i < casoEstudio['numeroSecuenciasNoPermitidas']['SecuenciaDeLongitud2']:
+            casoEstudio['strSecuenciasTurnosNP']['longitud2'].append(
+                secuenciaNP['Turno 1']+secuenciaNP['Turno 2']
+            )            
+        else:#Para las de longitud 3
+            casoEstudio['strSecuenciasTurnosNP']['longitud3'].append(
+                secuenciaNP['Turno 1']+secuenciaNP['Turno 2']+secuenciaNP['Turno 3']
+            )
     
     #Retornar el diccionario obtenido del archivo JSON
     return casoEstudio    
@@ -104,13 +122,16 @@ def cargarInstanciaMusliu(rutaArchivo):
             #Lectura de la secuencia de turnos no permitidos
             f.readline() #Saltar línea vacía
             f.readline() #Saltar encabezado que hace referencia al valor ("Not allowed shift sequences ")          
-            casoEstudio['SecuenciaTurnosNP'] = list()            
+            casoEstudio['SecuenciaTurnosNP'] = list()           
+            
+            #Recorrido controlado por los valores cargados previamente            
             for i in range(casoEstudio['numeroSecuenciasNoPermitidas']['SecuenciaDeLongitud2']):
                 arregloLinea = f.readline().strip().split()
                 casoEstudio['SecuenciaTurnosNP'].append({
                     'Turno 1'         : arregloLinea[0],
                     'Turno 2'         : arregloLinea[1],               
                 })                
+                                
             for i in range(casoEstudio['numeroSecuenciasNoPermitidas']['SecuenciaDeLongitud3']):
                 arregloLinea = f.readline().strip().split()
                 casoEstudio['SecuenciaTurnosNP'].append({
