@@ -65,17 +65,21 @@ for i,turnoK in enumerate(listadoTurnosPlano):
     print(f"Turno {i}: {turnoK}")
 print("---------------------------")
     
-#Establacer un orden (aleatorio o no) para recorrer esos pedazos
-ordenCoberturaTurnos = list(range(len(listadoTurnosPlano)))
-random.shuffle(ordenCoberturaTurnos)
+# #Establacer un orden (aleatorio o no) para recorrer esos pedazos
+# ordenCoberturaTurnos = list(range(len(listadoTurnosPlano)))
+# random.shuffle(ordenCoberturaTurnos)
 
-#Salida de diagnóstico
-print("---------------------------")
-print("Orden de cobertura de turnos: ")
-print(ordenCoberturaTurnos)
-print("---------------------------")
-
-#input() #Pausar ejecución
+#Generar los arranques (población) según el número de pedazos de programación
+listadoArranques = list()
+while len(listadoArranques) < len(listadoTurnosPlano):
+    
+    #Establacer un orden (aleatorio o no) para recorrer los pedazos de turno
+    ordenCoberturaTurnos = list(range(len(listadoTurnosPlano)))
+    random.shuffle(ordenCoberturaTurnos)
+    
+    #Revisar si está repetido antes de incorporar en el listado de arranques
+    if ordenCoberturaTurnos not in listadoArranques:
+        listadoArranques.append(ordenCoberturaTurnos)
 
 #Recorrer los pedazos y acomodarlos entre el personal disponible
 cuadroTurnos = list()
@@ -87,32 +91,14 @@ tiposTurnoInstancia = list(instancia['detalleTurnos'].keys())
 #Agregar turno vacío o de descanso
 tiposTurnoInstancia.append("-")
 
-# #Salida de diagnóstico
-# print(f"Tipos de turno: {tiposTurnoInstancia} - tipo del contenedor: {type(tiposTurnoInstancia)}")
-# input()#Pausa de ejecución
-
 #Abrir la programación del primer empleado con el primer turno del orden de cobertura
-#cuadroTurnos.append(generarProgramacionEmpleado(dias,tiposTurno).copy())
-#cuadroTurnos[0] = fc.generarProgramacionEmpleado(dias,tiposTurno).copy()
 cuadroTurnos[0] = fc.generarProgramacionEmpleado(dias,tiposTurno).copy()
 
-# #Salidas de diagnóstico de la creación del cuadro de turnos y primer turno
-# print("Declaración del cuadro de turnos: ")
-# pp.pprint(cuadroTurnos)
-# print("---------")
-# print("Diagnóstico del tipado del cuadro de turnos y el primer turno:")
-# print(len(cuadroTurnos[-1]['itinerario']))
-# [ print(type(elemento)) for elemento in cuadroTurnos[-1]['itinerario'] ]
-# print(f"Indice del dia: {listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia']}")
-# print(f"Tipado de la posición: {type(cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ])}")
-# print("---------")
 
-#Reemplazar estas formas de agregar por incorporar (actualizando los parámetros)
-#cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ].append(listadoTurnosPlano[ ordenCoberturaTurnos[0] ]) 
-#cuadroTurnos[-1]['itinerario'][ listadoTurnosPlano[ordenCoberturaTurnos[0]]['indiceDia'] ] = listadoTurnosPlano[ ordenCoberturaTurnos[0] ]
+####Continuar aquí
 
 #Llamado a la incorporación adecuada (no requiere validaciones por ser el inicio del cuadro de turnos)
-# cuadroTurnos[-1] = incorporarTurno(list(cuadroTurnos)[-1].copy(), listadoTurnosPlano[ ordenCoberturaTurnos[0] ] )
+
 cuadroTurnos[0] = fc.incorporarTurno( deepcopy(cuadroTurnos)[0].copy(), listadoTurnosPlano[ ordenCoberturaTurnos[0] ] )
 
 #Salida de diagnóstico
