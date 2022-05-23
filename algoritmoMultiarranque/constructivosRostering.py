@@ -29,7 +29,8 @@ def constructivoPark(instancia, ordenCoberturaTurnos):
     #Recorrer los pedazos y acomodarlos entre el personal disponible
     cuadroTurnos = list()
     #Inicializar con un estimado del doble del personal disponible
-    [cuadroTurnos.append(dict()) for _ in range(instancia['numeroEmpleados']*4)]
+    # [cuadroTurnos.append(dict()) for _ in range(instancia['numeroEmpleados']*4)]
+    [cuadroTurnos.append(dict()) for _ in range(len(listadoTurnosPlano))]
 
     #Obtener los tipos de turno
     tiposTurnoInstancia = list(instancia['detalleTurnos'].keys())

@@ -17,26 +17,26 @@ from time import perf_counter
 
 #Carga del listado de instancias
 nombresInstancias = list()
-# nombresInstancias.append("../instancias/versionJSON/Example1.json")
-# nombresInstancias.append("../instancias/versionJSON/Example2.json")
-# nombresInstancias.append("../instancias/versionJSON/Example3.json")
-# nombresInstancias.append("../instancias/versionJSON/Example4.json")
-# nombresInstancias.append("../instancias/versionJSON/Example5.json")
-# nombresInstancias.append("../instancias/versionJSON/Example6.json")
-# nombresInstancias.append("../instancias/versionJSON/Example7.json")
-# nombresInstancias.append("../instancias/versionJSON/Example8.json")
-# nombresInstancias.append("../instancias/versionJSON/Example9.json")
-# nombresInstancias.append("../instancias/versionJSON/Example10.json")
-# nombresInstancias.append("../instancias/versionJSON/Example11.json")
-# nombresInstancias.append("../instancias/versionJSON/Example12.json")
-# nombresInstancias.append("../instancias/versionJSON/Example13.json")
-# nombresInstancias.append("../instancias/versionJSON/Example14.json")
-# nombresInstancias.append("../instancias/versionJSON/Example15.json") #Revisar 
-# nombresInstancias.append("../instancias/versionJSON/Example16.json")
-# nombresInstancias.append("../instancias/versionJSON/Example17.json") #Revisar
+nombresInstancias.append("../instancias/versionJSON/Example1.json")
+nombresInstancias.append("../instancias/versionJSON/Example2.json")
+nombresInstancias.append("../instancias/versionJSON/Example3.json")
+nombresInstancias.append("../instancias/versionJSON/Example4.json")
+nombresInstancias.append("../instancias/versionJSON/Example5.json")
+nombresInstancias.append("../instancias/versionJSON/Example6.json")
+nombresInstancias.append("../instancias/versionJSON/Example7.json")
+nombresInstancias.append("../instancias/versionJSON/Example8.json")
+nombresInstancias.append("../instancias/versionJSON/Example9.json")
+nombresInstancias.append("../instancias/versionJSON/Example10.json")
+nombresInstancias.append("../instancias/versionJSON/Example11.json")
+nombresInstancias.append("../instancias/versionJSON/Example12.json")
+nombresInstancias.append("../instancias/versionJSON/Example13.json")
+nombresInstancias.append("../instancias/versionJSON/Example14.json")
+nombresInstancias.append("../instancias/versionJSON/Example15.json") #Revisar 
+nombresInstancias.append("../instancias/versionJSON/Example16.json")
+nombresInstancias.append("../instancias/versionJSON/Example17.json") #Revisar
 nombresInstancias.append("../instancias/versionJSON/Example18.json")
-# nombresInstancias.append("../instancias/versionJSON/Example19.json")
-# nombresInstancias.append("../instancias/versionJSON/Example20.json")
+nombresInstancias.append("../instancias/versionJSON/Example19.json")
+nombresInstancias.append("../instancias/versionJSON/Example20.json")
 
 #Recorrer las instancias cargadas en el listado correspondiente
 for nombreInstancia in nombresInstancias:
@@ -80,7 +80,8 @@ for nombreInstancia in nombresInstancias:
 
     #Generar los arranques (población) según el número de pedazos de programación
     listadoArranques = list()
-    while len(listadoArranques) < len(listadoTurnosPlano):
+    # while len(listadoArranques) < len(listadoTurnosPlano):#Ciclo multiarranque
+    while len(listadoArranques) < 1:#Ciclo constructivo con una solución
         
         #Establacer un orden (aleatorio o no) para recorrer los pedazos de turno
         ordenCoberturaTurnos = list(range(len(listadoTurnosPlano)))
