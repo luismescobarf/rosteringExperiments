@@ -14,7 +14,7 @@ from copy import deepcopy
 #-----------------
 
 #Carga de la instancia que se va a trabajar
-instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example1.json")
+# instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example1.json")
 # instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example2.json")
 # instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example3.json")
 # instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example4.json")
@@ -33,7 +33,7 @@ instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example1.js
 # instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example17.json")
 # instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example18.json")
 # instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example19.json")
-# instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example20.json")
+instancia = cargaInstancias.cargaVersionJSON("instancias/versionJSON/Example20.json")
 
 #Partir la matriz de requerimientos en pedazos y formar un listado
 #-----------------------------------------------------------------
@@ -80,7 +80,8 @@ print("---------------------------")
 #Recorrer los pedazos y acomodarlos entre el personal disponible
 cuadroTurnos = list()
 #Inicializar con un estimado del doble del personal disponible
-[cuadroTurnos.append(dict()) for _ in range(instancia['numeroEmpleados']*2)]
+# [cuadroTurnos.append(dict()) for _ in range(instancia['numeroEmpleados']*2)]
+[cuadroTurnos.append(dict()) for _ in range(len(listadoTurnosPlano))]
 
 #Obtener los tipos de turno
 tiposTurnoInstancia = list(instancia['detalleTurnos'].keys())

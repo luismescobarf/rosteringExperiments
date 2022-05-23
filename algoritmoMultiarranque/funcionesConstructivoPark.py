@@ -88,9 +88,9 @@ def numeroDiasTrabajandoConsecutivos(programacionEnRevision, horizonteTiempo):
         tamaniosSecuenciasOcupados.append(longitudSecuenciaActual)        
         
     #Salida de diagnóstico
-    print("---------------")
-    print(f"Estado de detección de secuencias ocupadas (bloques de trabajo encadenados) {tamaniosSecuenciasOcupados}")
-    print("---------------")
+    # print("---------------")
+    # print(f"Estado de detección de secuencias ocupadas (bloques de trabajo encadenados) {tamaniosSecuenciasOcupados}")
+    # print("---------------")
     
     #Al finalizar todo el proceso, retornar la longitud mayor   
     if tamaniosSecuenciasOcupados == list():
@@ -167,9 +167,9 @@ def cumplimientoCondiciones(programacionEnRevision, instancia, tiposTurno):
             if strSubsecuencia != str() and strSubsecuencia in instancia['strSecuenciasTurnosNP']['longitud2']:
                 cSecuenciasNP_Longitud2 = False #Falsear cuando incumple
                 
-                #Salida de diagnóstico
-                print(f"Secuencias Prohibidas Longitud 2: {instancia['strSecuenciasTurnosNP']['longitud2']}")
-                print(f"Secuencia Incumpliendo: {strSubsecuencia}")
+                # #Salida de diagnóstico
+                # print(f"Secuencias Prohibidas Longitud 2: {instancia['strSecuenciasTurnosNP']['longitud2']}")
+                # print(f"Secuencia Incumpliendo: {strSubsecuencia}")
                 
                 break #Detenerse para bajar costo computacional
             
@@ -199,8 +199,8 @@ def cumplimientoCondiciones(programacionEnRevision, instancia, tiposTurno):
                 cSecuenciasNP_Longitud3 = False #Falsear cuando incumple
                 
                 #Salida de diagnóstico
-                print(f"Secuencias Prohibidas Longitud 3: {instancia['strSecuenciasTurnosNP']['longitud3']}")
-                print(f"Secuencia Incumpliendo: {strSubsecuencia}")
+                # print(f"Secuencias Prohibidas Longitud 3: {instancia['strSecuenciasTurnosNP']['longitud3']}")
+                # print(f"Secuencia Incumpliendo: {strSubsecuencia}")
                 
                 break #Detenerse para bajar costo computacional
     

@@ -29,7 +29,7 @@ def constructivoPark(instancia, ordenCoberturaTurnos):
     #Recorrer los pedazos y acomodarlos entre el personal disponible
     cuadroTurnos = list()
     #Inicializar con un estimado del doble del personal disponible
-    [cuadroTurnos.append(dict()) for _ in range(instancia['numeroEmpleados']*2)]
+    [cuadroTurnos.append(dict()) for _ in range(instancia['numeroEmpleados']*4)]
 
     #Obtener los tipos de turno
     tiposTurnoInstancia = list(instancia['detalleTurnos'].keys())
@@ -87,12 +87,14 @@ def constructivoPark(instancia, ordenCoberturaTurnos):
                         incorporacionExitosa = True
                         break#Evitar más revisiones
                     else:
-                        print("Cumplimiento de condiciones no superado!")
+                        # print("Cumplimiento de condiciones no superado!")
                         #input()#Pausar la ejecución
+                        pass
                         
                 else:
-                    print("No fue posible incorporar turno, retorno -1")
+                    # print("No fue posible incorporar turno, retorno -1")
                     #input()#Pausar la ejecución
+                    pass
             
         #Si no fue exitosa, abrir una nueva programación en el cuadro de turnos con el turno i-ésimo actual    
         if incorporacionExitosa == False:
@@ -120,7 +122,8 @@ def constructivoPark(instancia, ordenCoberturaTurnos):
     #Envolver la solución generada: diccionario con cuadro de turnos y el número de empleados ocupados
     solucion = {
         'cuadroTurnos': cuadroTurnos,
-        'empleadosOcupados' : numeroEmpleadosOcupados
+        'empleadosOcupados' : numeroEmpleadosOcupados,
+        'numeroTotalTurnosCargados' : numeroTotalTurnos        
     }
     
     #Retornar la solución para que sea evaluada en otro contexto
